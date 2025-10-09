@@ -92,4 +92,6 @@ dependencies {
     implementation(libs.google.play.services.maps)
     implementation(libs.coroutines.play.services)
 
+    implementation(libs.androidx.core.splashscreen)
+
 }
