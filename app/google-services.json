@@ -12,7 +12,20 @@
           "package_name": "com.arlabs.raksha"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "741199930371-9okv43a8hp1p3u0beeaengo3ju9oirkn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.arlabs.raksha",
+            "certificate_hash": "d4067c0ca96f6467026ad9594f245bafd350b8c4"
+          }
+        },
+        {
+          "client_id": "741199930371-m1v0r1a4bg10m0eaj8mihml1rqbeqe8b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCp1CrSIhpEQeO-AoAZmrBAx7vfBJe2jC8"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "741199930371-m1v0r1a4bg10m0eaj8mihml1rqbeqe8b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

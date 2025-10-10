@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.google.gms.google.services) apply false
 
     // ADDED: Hilt plugin for Dependency Injection
-    alias(libs.plugins.dagger.hilt.android) apply false
+    alias(libs.plugins.hilt.android) apply false
     alias(libs.plugins.kotlin.kapt) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
+
 }

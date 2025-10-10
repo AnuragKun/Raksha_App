@@ -6,10 +6,11 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
 
     // ADDED: Apply the Hilt plugin for Dependency Injection
-    alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.hilt.android)
 
-    // ADDED: Apply the Kapt plugin for annotation processing (required by Hilt)
     alias(libs.plugins.kotlin.kapt)
+
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -48,7 +49,9 @@ android {
 }
 
 kapt {
+
     correctErrorTypes = true
+
 }
 
 dependencies {
@@ -81,9 +84,12 @@ dependencies {
     // --- Architecture Dependencies (ViewModel, Navigation, Hilt) ---
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler) // Hilt's annotation processor
+    implementation(libs.kotlinx.serialization.json)
+    // Hilt's annotation processor
+    kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
+    implementation(libs.hilt.android)
+
 
     // --- Firebase Dependencies (BOM manages versions for auth & firestore) ---
     implementation(platform(libs.firebase.bom))
@@ -98,4 +104,5 @@ dependencies {
 
     implementation(libs.androidx.core.splashscreen)
 
+    implementation(libs.androidx.datastore.preferences)
 }
