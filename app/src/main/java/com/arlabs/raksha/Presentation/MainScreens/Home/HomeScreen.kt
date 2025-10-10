@@ -1,4 +1,4 @@
-package com.arlabs.raksha.Presentation.Screens.HomeScreen
+package com.arlabs.raksha.Presentation.MainScreens.Home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
