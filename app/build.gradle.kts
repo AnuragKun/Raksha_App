@@ -8,10 +8,13 @@ plugins {
     // ADDED: Apply the Hilt plugin for Dependency Injection
     alias(libs.plugins.hilt.android)
 
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
 
     alias(libs.plugins.kotlin.serialization)
 }
+
+import java.util.Properties
+import java.io.FileInputStream
 
 android {
     namespace = "com.arlabs.raksha"
@@ -25,6 +28,14 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localProperties.load(FileInputStream(localPropertiesFile))
+        }
+        val mapsApiKey = localProperties.getProperty("MAPS_API_KEY") ?: ""
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
     buildTypes {
@@ -48,11 +59,9 @@ android {
     }
 }
 
-kapt {
-
-    correctErrorTypes = true
-
-}
+// REMOVED: kapt block is no longer needed for Hilt if we are using KSP, 
+// unless other processors still need it. But usually we replace it entirely.
+// If you have other kapt processors, you might need to keep it or migrate them too.
 
 dependencies {
 
@@ -85,8 +94,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
-    // Hilt's annotation processor
-    kapt(libs.hilt.compiler)
+    // Hilt's annotation processor - Switched to KSP
+    ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.hilt.android)
 
@@ -101,6 +110,9 @@ dependencies {
     implementation(libs.google.maps.compose)
     implementation(libs.google.play.services.maps)
     implementation(libs.coroutines.play.services)
+    implementation(libs.google.places)
+    implementation(libs.maps.utils)
+    implementation(libs.play.services.location)
 
     implementation(libs.androidx.core.splashscreen)
 
