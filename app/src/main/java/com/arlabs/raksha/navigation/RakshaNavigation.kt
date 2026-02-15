@@ -58,5 +58,9 @@ fun RakshaNavigation(startDestination: String) {
         composable(Routes.ProfileScreen) {
             com.arlabs.raksha.features.profile.ProfileScreen(navController = navController)
         }
+
+        composable(Routes.VerifyAccountScreen) {
+            com.arlabs.raksha.features.profile.VerifyAccountScreen(navController = navController)
+        }
     }
 }

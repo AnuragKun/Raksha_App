@@ -65,7 +65,7 @@ fun ContentScreen(modifier: Modifier = Modifier, selectedIndex: Int, navControll
         0 -> HomeScreen(navController = navController)
         1 -> SafeZoneScreen()
         2 -> ReportIncidentScreen()
-        3 -> ProfileScreen(navController = navController)
+        3 -> ProfileScreen(navController = navController, modifier = modifier)
 
     }
 }

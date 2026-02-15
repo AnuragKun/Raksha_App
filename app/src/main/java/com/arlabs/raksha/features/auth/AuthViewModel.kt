@@ -35,6 +35,25 @@ class AuthViewModel @Inject constructor(
     private val _verificationId = MutableStateFlow<String?>(null)
     val verificationId: StateFlow<String?> = _verificationId.asStateFlow()
 
+    // Flag to bypass authentication for development (e.g. when Firebase Console access is missing)
+    val isDevBypass = true
+
+    fun bypassLogin() {
+        Log.d("AuthViewModel", "Bypassing login for development")
+        _authState.value = Result.Loading
+        viewModelScope.launch(Dispatchers.IO) {
+            // Simulate network delay
+            kotlinx.coroutines.delay(1000)
+            
+            // Set local user state
+            setUserPreferencesUseCase.setLoggedIn(true)
+            setUserPreferencesUseCase.setFirstTimeLogin(false)
+            
+            // Emit success
+            _authState.value = Result.Success("Login Complete")
+        }
+    }
+
     fun signInWithGoogle(account: GoogleSignInAccount){
         Log.d("AuthViewModel", "Starting Google sign in for: ${account.email}")
         _authState.value = Result.Loading

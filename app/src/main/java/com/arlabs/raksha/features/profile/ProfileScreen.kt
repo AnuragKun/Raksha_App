@@ -37,7 +37,8 @@ import java.text.SimpleDateFormat
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    viewModel: ProfileViewModel = hiltViewModel()
+    viewModel: ProfileViewModel = hiltViewModel(),
+    modifier: Modifier = Modifier
 ) {
     val userData by viewModel.userData.collectAsState()
     
@@ -62,7 +63,7 @@ fun ProfileScreen(
         calendar.get(Calendar.DAY_OF_MONTH)
     )
 
-    GradientBox(modifier = Modifier.fillMaxSize()) {
+    GradientBox(modifier = modifier.fillMaxSize()) {
         Scaffold(
             containerColor = Color.Transparent,
             topBar = {
@@ -199,7 +200,7 @@ fun ProfileScreen(
 
                         Spacer(modifier = Modifier.height(32.dp))
 
-                        // Save Button
+                        // Update Button
                         Button(
                             onClick = {
                                 viewModel.saveUserData(
@@ -217,10 +218,168 @@ fun ProfileScreen(
                                 .fillMaxWidth()
                                 .height(50.dp),
                             shape = RoundedCornerShape(12.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EE))
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE91E63))
                         ) {
-                            Text("Save Profile", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                            Text("Update Details", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                         }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // 2. Timed Safety Check
+                var timerValue by remember { mutableFloatStateOf(30f) }
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.9f))
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text("Timed Safety Check", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                        Spacer(modifier = Modifier.height(16.dp))
+                        
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "${timerValue.toInt()}:00", 
+                                color = Color.Black, 
+                                fontSize = 32.sp, 
+                                fontWeight = FontWeight.Bold
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("Default Timer: ${timerValue.toInt()} minutes", color = Color.Gray, fontSize = 14.sp)
+                        }
+                        
+                        Slider(
+                            value = timerValue,
+                            onValueChange = { timerValue = it },
+                            valueRange = 5f..120f,
+                            steps = 0,
+                            colors = SliderDefaults.colors(
+                                thumbColor = Color(0xFFE91E63),
+                                activeTrackColor = Color(0xFFE91E63),
+                                inactiveTrackColor = Color.Gray.copy(alpha = 0.3f)
+                            )
+                        )
+                        
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            listOf(15, 30, 60, -1).forEach { min ->
+                                val label = if (min == -1) "Custom" else if (min == 60) "1 hour" else "$min min"
+                                val isSelected = if (min == -1) false else timerValue.toInt() == min
+                                
+                                FilterChip(
+                                    selected = isSelected,
+                                    onClick = { if(min != -1) timerValue = min.toFloat() },
+                                    label = { Text(label, color = if(isSelected) Color.White else Color.Black) },
+                                    colors = FilterChipDefaults.filterChipColors(
+                                        selectedContainerColor = Color(0xFFE91E63),
+                                        containerColor = Color.Gray.copy(alpha = 0.1f),
+                                        labelColor = Color.Black
+                                    ),
+                                    border = null
+                                )
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // 3. Account Verification
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.9f))
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text("Account Verification", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                        Spacer(modifier = Modifier.height(16.dp))
+                        
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = if(userData.isVerified) Icons.Default.CheckCircle else Icons.Default.Person,
+                                contentDescription = null,
+                                tint = if(userData.isVerified) Color.Green else Color.Gray,
+                                modifier = Modifier.size(32.dp)
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Column {
+                                Text(
+                                    text = "Status: ${if (userData.isVerified) "Verified" else "Not Verified"}",
+                                    color = Color.Black,
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 16.sp
+                                )
+                                Text(
+                                    text = "Unlock community features",
+                                    color = Color.Gray,
+                                    fontSize = 12.sp
+                                )
+                            }
+                        }
+
+                        if (!userData.isVerified) {
+                            Spacer(modifier = Modifier.height(24.dp))
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Button(
+                                    onClick = { 
+                                        navController.navigate("verify_account_screen") 
+                                    },
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE91E63)),
+                                    shape = RoundedCornerShape(24.dp),
+                                    modifier = Modifier.weight(1f).padding(end = 8.dp)
+                                ) {
+                                    Text("Verify Account", color = Color.White)
+                                }
+                                
+                                Button(
+                                    onClick = { /* Dismiss/Cancel logic */ },
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF0F0F0)),
+                                    shape = RoundedCornerShape(24.dp),
+                                    modifier = Modifier.weight(1f).padding(start = 8.dp)
+                                ) {
+                                    Text("Cancel", color = Color.Gray)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // 4. Custom SOS Message
+                var sosMessage by remember { mutableStateOf("I might be in trouble. My last known location is...") }
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.9f))
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text("Custom SOS Message", color = Color.Black, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                        Spacer(modifier = Modifier.height(16.dp))
+                        
+                        OutlinedTextField(
+                            value = sosMessage,
+                            onValueChange = { sosMessage = it },
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedContainerColor = Color.White,
+                                unfocusedContainerColor = Color.White,
+                                focusedTextColor = Color.Black,
+                                unfocusedTextColor = Color.Black,
+                                focusedBorderColor = Color(0xFFE91E63),
+                                unfocusedBorderColor = Color.Gray
+                            ),
+                            shape = RoundedCornerShape(12.dp),
+                            trailingIcon = {
+                                Icon(Icons.Default.Edit, contentDescription = "Edit", tint = Color.Gray)
+                            }
+                        )
                     }
                 }
             }

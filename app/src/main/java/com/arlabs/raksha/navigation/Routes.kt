@@ -7,4 +7,5 @@ object Routes {
     const val PhoneNumberScreen = "phone_number_screen"
     const val OtpScreen = "otp_screen"
     const val ProfileScreen = "profile_screen"
+    const val VerifyAccountScreen = "verify_account_screen"
 }

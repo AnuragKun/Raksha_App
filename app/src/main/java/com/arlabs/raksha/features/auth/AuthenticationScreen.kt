@@ -186,9 +186,13 @@ fun AuthenticationScreen(
 
                             Button(
                                 onClick = {
-                                    val googleSignInClient = GoogleSignInHelper.getGoogleSignInClient(context)
-                                    val signInIntent = googleSignInClient.signInIntent
-                                    googleSignInLauncher.launch(signInIntent) 
+                                    if (authViewModel.isDevBypass) {
+                                        authViewModel.bypassLogin()
+                                    } else {
+                                        val googleSignInClient = GoogleSignInHelper.getGoogleSignInClient(context)
+                                        val signInIntent = googleSignInClient.signInIntent
+                                        googleSignInLauncher.launch(signInIntent)
+                                    }
                                 },
                                 modifier = Modifier
                                     .fillMaxWidth()

@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -12,9 +15,6 @@ plugins {
 
     alias(libs.plugins.kotlin.serialization)
 }
-
-import java.util.Properties
-import java.io.FileInputStream
 
 android {
     namespace = "com.arlabs.raksha"
